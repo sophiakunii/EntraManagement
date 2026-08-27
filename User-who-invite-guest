@@ -1,0 +1,16 @@
+AuditLogs
+| where OperationName == "Invite external user"
+| extend InitiatedByUPN =
+tostring(parse_json(tostring(InitiatedBy.user)).userPrincipalName)
+| extend InitiatedByApp =
+tostring(parse_json(tostring(InitiatedBy.app)).displayName)
+| extend GuestUser =
+tostring(TargetResources[0].userPrincipalName)
+| project
+TimeGenerated,
+GuestUser,
+InitiatedByUPN,
+InitiatedByApp,
+Result,
+CorrelationId
+| order by TimeGenerated desc
