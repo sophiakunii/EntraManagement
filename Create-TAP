@@ -1,0 +1,51 @@
+# 必要モジュール
+Import-Module Microsoft.Graph.Authentication
+Import-Module Microsoft.Graph.Identity.SignIns
+
+# Graph 接続
+Connect-MgGraph -Scopes UserAuthenticationMethod.ReadWrite.All
+
+# 対象ユーザー一覧
+$Users = Import-Csv ".\Users.csv"
+
+# 出力用配列
+$Results = @()
+
+foreach ($User in $Users) {
+
+    Write-Host "TAP作成中: $($User.UserPrincipalName)" -ForegroundColor Cyan
+
+    try {
+
+        $Tap = New-MgUserAuthenticationTemporaryAccessPassMethod -UserId $User.UserPrincipalName -BodyParameter @{
+                isUsableOnce = $true
+                lifetimeInMinutes = 60
+            }
+
+        $Results += [PSCustomObject]@{
+            UserPrincipalName = $User.UserPrincipalName
+            TemporaryAccessPass = $Tap.TemporaryAccessPass
+            CreatedDateTime    = $Tap.CreatedDateTime
+            StartDateTime      = $Tap.StartDateTime
+        }
+
+        Write-Host "作成成功" -ForegroundColor Green
+    }
+    catch {
+
+        $Results += [PSCustomObject]@{
+            UserPrincipalName = $User.UserPrincipalName
+            TemporaryAccessPass = "ERROR"
+            CreatedDateTime    = ""
+            StartDateTime      = ""
+        }
+
+        Write-Warning $_
+    }
+}
+
+# 発行結果出力
+$Results |
+    Export-Csv ".\TemporaryAccessPassResult.csv" -NoTypeInformation -Encoding UTF8
+
+Write-Host "完了"
