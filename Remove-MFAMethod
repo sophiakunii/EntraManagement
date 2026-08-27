@@ -1,0 +1,28 @@
+# Microsoft Graph 接続
+Connect-MgGraph -Scopes UserAuthenticationMethod.ReadWrite.All
+
+# CSV読込
+$Users = Import-Csv ".\Users.csv"
+
+foreach ($User in $Users) {
+
+    Write-Host "処理開始: $($User.UserPrincipalName)" -ForegroundColor Cyan
+
+    try {
+
+        # Authenticator登録一覧取得
+        $Methods = Get-MgUserAuthenticationMicrosoftAuthenticatorMethod -UserId $User.UserPrincipalName  -ErrorAction Stop
+
+        foreach ($Method in $Methods) {
+
+            Write-Host "  Authenticator削除: $($Method.Id)"
+
+            Remove-MgUserAuthenticationMicrosoftAuthenticatorMethod -UserId $User.UserPrincipalName -MicrosoftAuthenticatorAuthenticationMethodId $Method.Id
+        }
+
+        Write-Host "完了: $($User.UserPrincipalName)" -ForegroundColor Green
+    }
+    catch {
+        Write-Warning "$($User.UserPrincipalName) の処理に失敗: $_"
+    }
+}
