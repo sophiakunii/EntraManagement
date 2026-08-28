@@ -6,9 +6,13 @@ PowerShell scripts and KQL queries for Microsoft Entra ID management.
 ・Create-TAP
 
 CSVファイルに保存されているユーザーの一時アクセスパスをまとめて作成するPowerShellスクリプト
+
 ・Remove-MFAMethod
+
 Entraに登録されたユーザーの既存の多要素認証設定を削除するPowerShellスクリプト
+
 ・User-who-invite-guest
+
 監査ログをLog Analyticsワークスペースに転送した際、Guestユーザーを作成(招待)したユーザーを特定するためのKQLクエリ
 
 # CSV ファイルの作り方
