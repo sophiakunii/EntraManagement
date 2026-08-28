@@ -20,6 +20,9 @@ Entraに登録されたユーザーの既存の多要素認証設定を削除す
 ファイルは以下のように構成してください。
 
 userprincipalname
+
 a@a.com
+
 b@a.com
+
 c@a.com
