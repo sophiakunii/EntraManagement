@@ -2,7 +2,9 @@
 PowerShell scripts and KQL queries for Microsoft Entra ID management.
 
 このリポジトリに保存されているファイルは以下の目的で使用します。
+
 ・Create-TAP
+
 CSVファイルに保存されているユーザーの一時アクセスパスをまとめて作成するPowerShellスクリプト
 ・Remove-MFAMethod
 Entraに登録されたユーザーの既存の多要素認証設定を削除するPowerShellスクリプト
